@@ -3,6 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../blocs/authentication_bloc/authentication_bloc.dart';
+import '../modules/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
+import '../modules/auth/views/login_screen.dart';
+import '../modules/base/views/base_screen.dart';
+import '../modules/create_pizza/views/create_pizza_screen.dart';
+import '../modules/home/views/home_screen.dart';
+import '../modules/splash/views/splash_screen.dart';
 
 final _navKey = GlobalKey<NavigatorState>();
 final _shellNavigationKey = GlobalKey<NavigatorState>();
@@ -32,7 +38,7 @@ GoRouter router(AuthenticationBloc authBloc) {
               builder: (context, state) =>
                   BlocProvider<AuthenticationBloc>.value(
                 value: BlocProvider.of<AuthenticationBloc>(context),
-                child: SplashScreen(),
+                child: const SplashScreen(),
               ),
             ),
             GoRoute(
@@ -40,16 +46,20 @@ GoRouter router(AuthenticationBloc authBloc) {
               builder: (context, state) =>
                   BlocProvider<AuthenticationBloc>.value(
                 value: BlocProvider.of<AuthenticationBloc>(context),
-                child: LoginScreen(),
+                child: BlocProvider<SignInBloc>(
+                  create: (context) => SignInBloc(
+                      context.read<AuthenticationBloc>().userRepository),
+                  child: const SignInScreen(),
+                ),
               ),
             ),
             GoRoute(
               path: '/home',
-              builder: (context, state) =>
-                  BlocProvider<AuthenticationBloc>.value(
-                value: BlocProvider.of<AuthenticationBloc>(context),
-                child: HomeScreen(),
-              ),
+              builder: (context, state) => const HomeScreen(),
+            ),
+            GoRoute(
+              path: '/create',
+              builder: (context, state) => const CreatePizzaScreen(),
             ),
           ],
         )
