@@ -1,3 +1,5 @@
+import 'package:uuid/uuid.dart';
+
 import '../entities/entities.dart';
 import 'models.dart';
 
@@ -23,6 +25,18 @@ class Pizza {
     required this.discount,
     required this.macros,
   });
+
+  static var empty = Pizza(
+    pizzaId: const Uuid().v1(),
+    picture: '',
+    isVeg: false,
+    spicy: 1,
+    name: '',
+    description: '',
+    price: 0,
+    discount: 0,
+    macros: Macros.empty,
+  );
 
   PizzaEntity toEntity() {
     return PizzaEntity(
@@ -50,5 +64,20 @@ class Pizza {
       discount: entity.discount,
       macros: entity.macros,
     );
+  }
+
+  @override
+  String toString() {
+    return '''
+    pizzaId: $pizzaId,
+    picture: $picture,
+    isVeg: $isVeg,
+    spicy: $spicy,
+    name: $name,
+    description: $description,
+    price: $price,
+    discount: $discount,
+    macros: $macros,
+    ''';
   }
 }
